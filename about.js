@@ -6,23 +6,23 @@
 const ME = {
 
   // ── BASICS ─────────────────────────────────────────────
-  name:         "Your Name",          // big heading on every page
-  username:     "@username",          // shown in subtitles
-  pronouns:     "they/them",
-  activeSince:  "2021",               // year you started doing object camps
+  name:         "Ryth1m",          // big heading on every page
+  username:     "@ryth1m",          // shown in subtitles
+  pronouns:     "he/him",
+  activeSince:  "2023",               // year you started doing object camps
   status:       "Active",             // shown in the top-right nav dot
-  footerText:   "still broadcasting · 2025",
+  footerText:   "still broadcasting · 2026",
 
   // ── ABOUT PAGE ─────────────────────────────────────────
-  bio: "Write something about yourself here — who you are, how you got into object camps, what you love about them, anything!",
+  bio: "Hello! I have seen people make google documents about their camp experiences, so I decided to make a whole website about mine! :D",
 
-  favoriteCamp: "Camp Name Here",
-  favoriteChar: "Character Name Here",
+  favoriteCamp: "BFTTD",
+  favoriteChar: "Tivo",
 
   // avatar image — put your image in an "images/" folder on GitHub
   // example: "images/avatar.png"
   // leave as "" to show a placeholder
-  avatarImg: "",
+  avatarImg: "avatar.png",
 
   // ── TAGS ───────────────────────────────────────────────
   // color options: "green" | "blue" | "red" | "purple" | "" (grey)
@@ -30,34 +30,33 @@ const ME = {
   tags: [
     { label: "Object Camp Fan", color: "green"  },
     { label: "Competitor",      color: "blue"   },
-    { label: "Host",            color: "red"    },
-    { label: "Add your own",    color: ""       },
+    { label: "Host",            color: "yellow"    },
   ],
 
   // ── FAVOURITE THINGS ───────────────────────────────────
   // just a list of things you enjoy about camps
   favorites: [
     "Team challenges",
-    "Designing my OC",
-    "Drama episodes",
-    "Making alliances",
+    "Fun",
+    "Awesome challenges",
+    "Awesome members",
   ],
 
   // ── GOALS ──────────────────────────────────────────────
   goals: [
     "Win 5 camps total",
-    "Host my own camp",
-    "Play every object type",
-    "Make top 3 in every camp",
+    "Make season 2 of my camp",
+    "More friends",
+    "Get to atleast top 10",
   ],
 
   // ── SOCIALS ────────────────────────────────────────────
   // leave url as "" if you don't want it to be a clickable link
   // delete a whole line if you don't use that platform
   socials: [
-    { label: "Discord",  value: "yourtag#0000",          url: "" },
-    { label: "YouTube",  value: "youtube.com/yourchannel", url: "" },
-    { label: "Twitter",  value: "@yourhandle",            url: "" },
+    { label: "Discord",  value: "markoitzmeh",          url: "" },
+    { label: "Bluesky",  value: "https://bsky.app/profile/ryth1m.bsky.social", url: "" },
+    { label: "X",  value: "https://x.com/Ryth1mz",            url: "" },
   ],
 
 };
