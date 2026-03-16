@@ -8,13 +8,13 @@
 // status:    "ongoing" | "finished"
 
 const CAMPS = [
-  { name: "Camp Name Here",  char: "Character", host: "Host Name", year: "2025", status: "ongoing",  placement: "tbd"    },
-  { name: "Camp Name Here",  char: "Character", host: "Host Name", year: "2025", status: "ongoing",  placement: "tbd"    },
-  { name: "Camp Name Here",  char: "Character", host: "Host Name", year: "2024", status: "finished", placement: "winner" },
-  { name: "Camp Name Here",  char: "Character", host: "Host Name", year: "2024", status: "finished", placement: "2nd"    },
-  { name: "Camp Name Here",  char: "Character", host: "Host Name", year: "2024", status: "finished", placement: "top5"   },
-  { name: "Camp Name Here",  char: "Character", host: "Host Name", year: "2023", status: "finished", placement: "merged" },
-  { name: "Camp Name Here",  char: "Character", host: "Host Name", year: "2023", status: "finished", placement: "early"  },
+  { name: "COP 1",  char: "Stary", host: "Chipy", year: "2023", status: "Finished",  placement: "forgot"    },
+  { name: "COP 2",  char: "Stary", host: "Chipy", year: "2023", status: "Finished",  placement: "forgot"    },
+  { name: "COP 3",  char: "Stary", host: "Chipy", year: "2023", status: "Finished",  placement: "forgot"    },
+  { name: "COP 4",  char: "Stary", host: "Chipy", year: "2024", status: "Finished",  placement: "forgot"    },
+  { name: "COP 5",  char: "Stary", host: "Chipy", year: "2024", status: "Finished",  placement: "forgot"    },
+  { name: "COP 7",  char: "Stary", host: "Chipy", year: "2025", status: "Finished",  placement: "forgot"    },
+  { name: "BANNED (forgot)",  char: "Tivo", host: "Host Name", year: "2026", status: "banned", placement: "banned"  },
   // ← copy any line above and paste here to add a new camp
 ];
 
@@ -24,7 +24,6 @@ const CAMPS = [
 // delete everything inside HOSTING = [ ] if you don't host
 
 const HOSTING = [
-  { name: "Camp Name Here", signups: "open",     contestants: 12, year: "2025" },
-  { name: "Camp Name Here", signups: "finished", contestants: 20, year: "2024" },
+  { name: "BFTTD", signups: "closed",     contestants: 17, year: "2026" },
   // ← copy any line above and paste here to add a hosted camp
 ];
