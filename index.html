@@ -83,6 +83,7 @@
   .td-place { text-align:right; font-size:0.62rem; letter-spacing:1.5px; text-transform:uppercase; white-space:nowrap; }
   .place-win { color:#b8ff57; } .place-2nd { color:#57c8ff; } .place-top { color:#ffce57; }
   .place-mid { color:#ff9f57; } .place-early { color:#555; }   .place-tbd { color:#3a3a3a; }
+  .place-bad { color:#ff6b6b; }
 
   /* CATEGORY GROUPS */
   .cat-group { margin-bottom:40px; }
@@ -188,6 +189,7 @@
     <button class="tool-btn filter-active" onclick="setFilter('all',this)">All</button>
     <button class="tool-btn" onclick="setFilter('ongoing',this)">Ongoing</button>
     <button class="tool-btn" onclick="setFilter('finished',this)">Finished</button>
+    <button class="tool-btn" onclick="setFilter('didntstart',this)">Didn't Start</button>
     <button class="tool-btn" onclick="setFilter('won',this)">Wins</button>
     <div class="tool-sep"></div>
     <span class="tool-label">Sort</span>
@@ -207,6 +209,10 @@
     <div class="cat-group" data-cat="finished">
       <div class="cat-header"><div class="cat-dot" style="background:#555"></div><div class="cat-title">Finished</div><div class="cat-count" id="count-finished"></div></div>
       <table><thead><tr><th>#</th><th>Camp</th><th>Character</th><th>Host</th><th>Year</th><th class="r">Placement</th></tr></thead><tbody id="tbody-finished"></tbody></table>
+    </div>
+    <div class="cat-group" data-cat="didntstart">
+      <div class="cat-header"><div class="cat-dot" style="background:#ff6b6b"></div><div class="cat-title">Didn't Start</div><div class="cat-count" id="count-didntstart"></div></div>
+      <table><thead><tr><th>#</th><th>Camp</th><th>Character</th><th>Host</th><th>Year</th><th class="r">Placement</th></tr></thead><tbody id="tbody-didntstart"></tbody></table>
     </div>
   </div>
   <div class="no-results" id="no-results">No camps match this filter.</div>
@@ -245,32 +251,66 @@
 
 <script>
 // ── PLACEMENT HELPERS ──────────────────────────────────────────
-const PLACEMENT_ORDER = { winner:0, "2nd":1, top5:2, merged:3, early:4, tbd:5 };
-const PLACEMENT_LABEL = {
-  winner: '<span class="place-win">Winner ✦</span>',
-  "2nd":  '<span class="place-2nd">2nd place</span>',
-  top5:   '<span class="place-top">Top 5</span>',
-  merged: '<span class="place-mid">Merged</span>',
-  early:  '<span class="place-early">Elim. early</span>',
-  tbd:    '<span class="place-tbd">TBD</span>',
+const PLACEMENT_ORDER = {
+  winner:0, "2nd":1, "3rd":2, "4th":3, "5th":4, "6th":5, "7th":6,
+  "8th":7, "9th":8, "10th":9, "11th":10, "12th":11, "13th":12, "14th":13,
+  merged:14, premerge:15, forgot:16, dnp:17, banned:18, quit:19, tbd:20,
 };
+const PLACEMENT_LABEL = {
+  winner:   '<span class="place-win">Winner ✦</span>',
+  "2nd":    '<span class="place-2nd">2nd place</span>',
+  "3rd":    '<span class="place-2nd">3rd place</span>',
+  "4th":    '<span class="place-top">4th place</span>',
+  "5th":    '<span class="place-top">5th place</span>',
+  "6th":    '<span class="place-top">6th place</span>',
+  "7th":    '<span class="place-top">7th place</span>',
+  "8th":    '<span class="place-mid">8th place</span>',
+  "9th":    '<span class="place-mid">9th place</span>',
+  "10th":   '<span class="place-mid">10th place</span>',
+  "11th":   '<span class="place-early">11th place</span>',
+  "12th":   '<span class="place-early">12th place</span>',
+  "13th":   '<span class="place-early">13th place</span>',
+  "14th":   '<span class="place-early">14th place</span>',
+  merged:   '<span class="place-mid">Merged</span>',
+  premerge: '<span class="place-early">Pre-merge</span>',
+  forgot:   '<span class="place-bad">Forgot</span>',
+  banned:   '<span class="place-bad">Banned</span>',
+  dnp:      '<span class="place-bad">DNP</span>',
+  quit:     '<span class="place-early">Quit</span>',
+  tbd:      '<span class="place-tbd">TBD</span>',
+};
+// anything not in the list above shows as-is in grey (e.g. "7th (DNP)")
+function getPlacementLabel(p) {
+  return PLACEMENT_LABEL[p] || `<span class="place-early">${p}</span>`;
+}
 
 let currentFilter = 'all';
 
 // ── BUILD CAMP ROWS ────────────────────────────────────────────
+function normaliseStatus(s) {
+  const lower = (s||'').toLowerCase().trim();
+  if (['finished','done','complete'].includes(lower)) return 'finished';
+  if (['ongoing','active','in progress'].includes(lower)) return 'ongoing';
+  if (['didnt start',"didn't start",'not started','dropped'].includes(lower)) return 'didntstart';
+  return lower;
+}
+
 function buildRows(data) {
-  ['ongoing','finished'].forEach(cat => {
-    const rows = data.filter(c => c.status === cat);
-    document.getElementById('tbody-'+cat).innerHTML = rows.map((c,i) => `
-      <tr class="camp-row" data-status="${c.status}" data-placement="${c.placement}">
+  ['ongoing','finished','didntstart'].forEach(cat => {
+    const tbody = document.getElementById('tbody-'+cat);
+    if (!tbody) return;
+    const rows = data.filter(c => normaliseStatus(c.status) === cat);
+    tbody.innerHTML = rows.map((c,i) => `
+      <tr class="camp-row" data-status="${normaliseStatus(c.status)}" data-placement="${c.placement}">
         <td class="td-num">${String(i+1).padStart(2,'0')}</td>
         <td class="td-name">${c.name}</td>
         <td class="td-char"><span class="char-pill">${c.char}</span></td>
         <td class="td-host">${c.host}</td>
         <td class="td-year">${c.year}</td>
-        <td class="td-place">${PLACEMENT_LABEL[c.placement]}</td>
+        <td class="td-place">${getPlacementLabel(c.placement)}</td>
       </tr>`).join('');
-    document.getElementById('count-'+cat).textContent = rows.length + ' camp' + (rows.length!==1?'s':'');
+    const countEl = document.getElementById('count-'+cat);
+    if (countEl) countEl.textContent = rows.length + ' camp' + (rows.length!==1?'s':'');
   });
 }
 
@@ -280,15 +320,16 @@ function applyFilter(filter) {
   let vis = 0;
   document.querySelectorAll('.camp-row').forEach(r => {
     let show = true;
-    if (filter==='ongoing')  show = r.dataset.status==='ongoing';
-    if (filter==='finished') show = r.dataset.status==='finished';
-    if (filter==='won')      show = r.dataset.placement==='winner';
+    if (filter==='ongoing')     show = r.dataset.status==='ongoing';
+    if (filter==='finished')    show = r.dataset.status==='finished';
+    if (filter==='didntstart')  show = r.dataset.status==='didntstart';
+    if (filter==='won')         show = r.dataset.placement==='winner';
     r.classList.toggle('hidden', !show);
     if (show) vis++;
   });
-  ['ongoing','finished'].forEach(cat => {
+  ['ongoing','finished','didntstart'].forEach(cat => {
     const g = document.querySelector(`[data-cat="${cat}"]`);
-    g.style.display = g.querySelectorAll('.camp-row:not(.hidden)').length===0 ? 'none' : '';
+    if (g) g.style.display = g.querySelectorAll('.camp-row:not(.hidden)').length===0 ? 'none' : '';
   });
   document.getElementById('no-results').style.display = vis===0 ? 'block' : 'none';
   document.getElementById('visible-count').textContent = vis + ' camp' + (vis!==1?'s':'');
@@ -306,7 +347,7 @@ function sortBy(mode, btn) {
   btn.classList.add('active');
   let sorted = [...CAMPS];
   if (mode==='year')      sorted.sort((a,b) => b.year - a.year);
-  if (mode==='placement') sorted.sort((a,b) => PLACEMENT_ORDER[a.placement] - PLACEMENT_ORDER[b.placement]);
+  if (mode==='placement') sorted.sort((a,b) => (PLACEMENT_ORDER[a.placement]??99) - (PLACEMENT_ORDER[b.placement]??99));
   if (mode==='name')      sorted.sort((a,b) => a.name.localeCompare(b.name));
   buildRows(sorted);
   applyFilter(currentFilter);
@@ -343,8 +384,13 @@ function buildChars() {
     <div class="char-card">
       <div class="char-img-wrap">
         ${c.img
-          ? `<img src="${c.img}" alt="${c.name}">`
-          : `<div class="char-img-placeholder"><div style="font-size:1.4rem">◻</div><div>No image yet</div><div style="font-size:.45rem;opacity:.5">add to images/chars/</div></div>`}
+          ? `<img src="${c.img}" alt="${c.name}" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">`
+          : ''}
+        <div class="char-img-placeholder" style="${c.img?'display:none':''}">
+          <div style="font-size:1.4rem">◻</div>
+          <div>${c.img ? 'Image not found' : 'No image yet'}</div>
+          <div style="font-size:.45rem;opacity:.5">${c.img ? c.img : 'add path in characters.js'}</div>
+        </div>
       </div>
       <div class="char-info">
         <div class="char-name">${c.name}</div>
@@ -357,7 +403,7 @@ function buildChars() {
 // ── BUILD ABOUT ────────────────────────────────────────────────
 function buildAbout() {
   const avatar = ME.avatarImg
-    ? `<img src="${ME.avatarImg}" alt="${ME.name}">`
+    ? `<img src="${ME.avatarImg}" alt="${ME.name}" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"><div class="about-avatar-placeholder" style="display:none"><div style="font-size:1.4rem">◻</div><div>Image not found</div><div style="font-size:.45rem;opacity:.5">${ME.avatarImg}</div></div>`
     : `<div class="about-avatar-placeholder"><div style="font-size:1.4rem">◻</div><div>Set avatarImg in about.js</div></div>`;
 
   const socialLines = ME.socials.filter(s=>s.value).map(s =>
@@ -409,7 +455,7 @@ function buildAbout() {
 // ── STATS ──────────────────────────────────────────────────────
 function updateStats() {
   const wins    = CAMPS.filter(c => c.placement==='winner').length;
-  const ongoing = CAMPS.filter(c => c.status==='ongoing').length;
+  const ongoing = CAMPS.filter(c => normaliseStatus(c.status)==='ongoing').length;
   const chars   = new Set(CAMPS.map(c => c.char)).size;
   document.getElementById('s-total').textContent   = CAMPS.length;
   document.getElementById('s-ongoing').textContent = ongoing;
