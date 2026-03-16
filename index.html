@@ -1,1 +1,457 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>camp log</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Syne:wght@700;800&display=swap" rel="stylesheet">
 
+<!-- ╔══════════════════════════════════════════════════════╗ -->
+<!-- ║  Your data files — loaded here, edit them directly  ║ -->
+<!-- ╚══════════════════════════════════════════════════════╝ -->
+<script src="about.js"></script>
+<script src="camps.js"></script>
+<script src="characters.js"></script>
+
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: #0d0d10; font-family: 'Space Mono', monospace; color: #e8e6de; min-height: 100vh; }
+  body::before { content:''; position:fixed; inset:0; background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,0.05) 2px,rgba(0,0,0,0.05) 4px); pointer-events:none; z-index:999; }
+  @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.15} }
+  @keyframes fadeIn { from{opacity:0;transform:translateY(8px)} to{opacity:1;transform:translateY(0)} }
+
+  /* NAV */
+  nav { position:sticky; top:0; z-index:100; background:rgba(13,13,16,0.97); backdrop-filter:blur(12px); border-bottom:1px solid rgba(255,255,255,0.07); display:flex; align-items:center; justify-content:space-between; padding:0 40px; height:54px; gap:16px; }
+  .nav-logo { font-family:'Syne',sans-serif; font-weight:800; font-size:0.82rem; letter-spacing:4px; text-transform:uppercase; color:#b8ff57; flex-shrink:0; }
+  .nav-tabs { display:flex; height:100%; }
+  .nav-tab { font-family:'Space Mono',monospace; font-size:0.6rem; letter-spacing:2px; text-transform:uppercase; padding:0 22px; border:none; border-bottom:2px solid transparent; background:transparent; color:#555; cursor:pointer; transition:all 0.15s; height:100%; }
+  .nav-tab:hover { color:#e8e6de; }
+  .nav-tab.active { color:#e8e6de; border-bottom-color:#b8ff57; }
+  .nav-status { font-size:0.58rem; letter-spacing:2px; text-transform:uppercase; color:#444; display:flex; align-items:center; gap:8px; flex-shrink:0; }
+  .dot { width:6px; height:6px; border-radius:50%; background:#b8ff57; animation:blink 2s ease-in-out infinite; }
+
+  /* PAGES */
+  .page { display:none; animation:fadeIn 0.25s ease both; }
+  .page.active { display:block; }
+  .inner { max-width:860px; margin:0 auto; padding:64px 32px 120px; }
+
+  /* SHARED */
+  .hero-tag { font-size:0.6rem; letter-spacing:3px; text-transform:uppercase; color:#b8ff57; margin-bottom:16px; display:flex; align-items:center; gap:10px; }
+  .hero-tag::before { content:''; display:inline-block; width:6px; height:6px; border-radius:50%; background:#b8ff57; animation:blink 2s ease-in-out infinite; }
+  .big-title { font-family:'Syne',sans-serif; font-weight:800; font-size:clamp(2.6rem,8vw,5.5rem); line-height:0.88; text-transform:uppercase; letter-spacing:-2px; margin-bottom:18px; }
+  .big-title .ghost { display:block; color:transparent; -webkit-text-stroke:1px rgba(255,255,255,0.15); }
+  .page-sub { font-size:0.65rem; letter-spacing:2px; text-transform:uppercase; color:#444; margin-bottom:56px; }
+  .section-label { font-size:0.58rem; letter-spacing:3px; text-transform:uppercase; color:#444; margin-bottom:16px; padding-bottom:12px; border-bottom:1px solid rgba(255,255,255,0.06); display:flex; align-items:center; justify-content:space-between; }
+  .section-label span { color:#b8ff57; }
+
+  /* STATS */
+  .stats-row { display:flex; border:1px solid rgba(255,255,255,0.07); margin-bottom:48px; }
+  .stat-cell { flex:1; padding:22px 16px; border-right:1px solid rgba(255,255,255,0.07); text-align:center; }
+  .stat-cell:last-child { border-right:none; }
+  .stat-n { font-family:'Syne',sans-serif; font-weight:800; font-size:1.8rem; line-height:1; margin-bottom:5px; }
+  .stat-cell:nth-child(1) .stat-n { color:#b8ff57; }
+  .stat-cell:nth-child(2) .stat-n { color:#57c8ff; }
+  .stat-cell:nth-child(3) .stat-n { color:#ffce57; }
+  .stat-cell:nth-child(4) .stat-n { color:#ff6b6b; }
+  .stat-cell:nth-child(5) .stat-n { color:#c77dff; }
+  .stat-l { font-size:0.55rem; letter-spacing:2px; text-transform:uppercase; color:#444; }
+
+  /* TOOLBAR */
+  .toolbar { display:flex; gap:6px; margin-bottom:24px; flex-wrap:wrap; align-items:center; }
+  .tool-label { font-size:0.55rem; letter-spacing:2px; text-transform:uppercase; color:#444; margin-right:4px; }
+  .tool-btn { font-family:'Space Mono',monospace; font-size:0.58rem; letter-spacing:1.5px; text-transform:uppercase; padding:5px 12px; border:1px solid rgba(255,255,255,0.08); background:transparent; color:#555; cursor:pointer; transition:all 0.15s; }
+  .tool-btn:hover { color:#e8e6de; border-color:rgba(255,255,255,0.2); }
+  .tool-btn.active { color:#e8e6de; border-color:rgba(255,255,255,0.3); }
+  .tool-btn.filter-active { background:#b8ff57; color:#0d0d10; border-color:#b8ff57; }
+  .tool-sep { width:1px; height:20px; background:rgba(255,255,255,0.07); margin:0 4px; }
+
+  /* TABLE */
+  table { width:100%; border-collapse:collapse; }
+  thead tr { border-bottom:1px solid rgba(255,255,255,0.08); }
+  th { font-size:0.55rem; letter-spacing:2.5px; text-transform:uppercase; color:#444; padding-bottom:12px; text-align:left; font-weight:400; }
+  th.r { text-align:right; }
+  tbody tr { border-bottom:1px solid rgba(255,255,255,0.04); transition:background 0.12s; }
+  tbody tr:hover { background:rgba(255,255,255,0.025); }
+  tbody tr.hidden { display:none; }
+  td { padding:18px 0; vertical-align:middle; }
+  .td-num { color:#2a2a2a; font-size:0.6rem; padding-right:18px; width:28px; }
+  .td-name { font-family:'Syne',sans-serif; font-weight:700; font-size:0.9rem; padding-right:20px; min-width:160px; }
+  .td-char { padding-right:20px; }
+  .char-pill { display:inline-block; border:1px solid rgba(255,255,255,0.12); color:#b8ff57; padding:2px 10px; font-size:0.6rem; letter-spacing:1.5px; text-transform:uppercase; }
+  .td-host { font-size:0.65rem; color:#555; padding-right:20px; }
+  .td-year { font-size:0.62rem; color:#3a3a3a; padding-right:20px; }
+  .td-place { text-align:right; font-size:0.62rem; letter-spacing:1.5px; text-transform:uppercase; white-space:nowrap; }
+  .place-win { color:#b8ff57; } .place-2nd { color:#57c8ff; } .place-top { color:#ffce57; }
+  .place-mid { color:#ff9f57; } .place-early { color:#555; }   .place-tbd { color:#3a3a3a; }
+
+  /* CATEGORY GROUPS */
+  .cat-group { margin-bottom:40px; }
+  .cat-header { display:flex; align-items:center; gap:10px; margin-bottom:12px; }
+  .cat-dot { width:6px; height:6px; border-radius:50%; flex-shrink:0; }
+  .cat-title { font-size:0.6rem; letter-spacing:3px; text-transform:uppercase; color:#555; }
+  .cat-count { font-size:0.55rem; letter-spacing:1px; color:#333; margin-left:auto; }
+  .no-results { text-align:center; padding:48px 0; font-size:0.65rem; letter-spacing:2px; text-transform:uppercase; color:#333; display:none; }
+
+  /* HOSTING */
+  .hosting-section { margin-top:48px; }
+  .hosting-header { display:flex; align-items:center; gap:10px; margin-bottom:16px; padding-bottom:12px; border-bottom:1px solid rgba(255,255,255,0.06); }
+  .hosting-label { font-size:0.6rem; letter-spacing:3px; text-transform:uppercase; color:#ff6b6b; }
+  .host-card { border:1px solid rgba(255,255,255,0.07); background:rgba(255,107,107,0.04); padding:18px 22px; margin-bottom:2px; display:grid; grid-template-columns:1fr auto; gap:16px; align-items:center; transition:background 0.15s; }
+  .host-card:hover { background:rgba(255,107,107,0.07); }
+  .host-card-name { font-family:'Syne',sans-serif; font-weight:700; font-size:0.9rem; margin-bottom:5px; }
+  .host-card-meta { font-size:0.6rem; letter-spacing:1.5px; text-transform:uppercase; color:#555; display:flex; gap:18px; flex-wrap:wrap; }
+  .host-status { font-size:0.58rem; letter-spacing:2px; text-transform:uppercase; padding:4px 12px; border:1px solid #ff6b6b; color:#ff6b6b; white-space:nowrap; }
+  .host-status.closed { border-color:#444; color:#444; }
+
+  /* CHARACTER GALLERY */
+  .chars-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(200px,1fr)); gap:2px; }
+  .char-card { background:#13131a; border:1px solid rgba(255,255,255,0.06); overflow:hidden; transition:border-color 0.15s,background 0.15s; }
+  .char-card:hover { background:#1a1a24; border-color:rgba(255,255,255,0.14); }
+  .char-img-wrap { aspect-ratio:1; background:#0d0d10; border-bottom:1px solid rgba(255,255,255,0.06); overflow:hidden; display:flex; align-items:center; justify-content:center; }
+  .char-img-wrap img { width:100%; height:100%; object-fit:cover; }
+  .char-img-placeholder { display:flex; flex-direction:column; align-items:center; gap:6px; color:#2a2a2a; font-size:0.52rem; letter-spacing:2px; text-transform:uppercase; }
+  .char-info { padding:14px 16px 16px; }
+  .char-name { font-family:'Syne',sans-serif; font-weight:700; font-size:0.9rem; margin-bottom:6px; }
+  .char-camp-tag { display:inline-block; border:1px solid rgba(255,255,255,0.08); color:#b8ff57; padding:1px 8px; font-size:0.55rem; letter-spacing:1px; margin:2px 2px 2px 0; }
+
+  /* ABOUT */
+  .about-grid { display:grid; grid-template-columns:220px 1fr; gap:2px; }
+  .about-avatar-wrap { aspect-ratio:3/4; background:#0d0d10; border:1px solid rgba(255,255,255,0.06); overflow:hidden; display:flex; align-items:center; justify-content:center; margin-bottom:2px; }
+  .about-avatar-wrap img { width:100%; height:100%; object-fit:cover; }
+  .about-avatar-placeholder { display:flex; flex-direction:column; align-items:center; gap:8px; color:#2a2a2a; font-size:0.52rem; letter-spacing:2px; text-transform:uppercase; text-align:center; padding:16px; }
+  .about-right { display:flex; flex-direction:column; gap:2px; }
+  .about-block { background:#13131a; border:1px solid rgba(255,255,255,0.06); padding:24px 28px; }
+  .about-block.accent { border-color:rgba(184,255,87,0.2); background:rgba(184,255,87,0.03); }
+  .about-label { font-size:0.58rem; letter-spacing:3px; text-transform:uppercase; color:#b8ff57; margin-bottom:14px; }
+  .about-value { font-size:0.85rem; line-height:1.85; color:#e8e6de; }
+  .about-value.sm { font-size:0.78rem; line-height:2; color:#666; }
+  .about-value.sm span { color:#e8e6de; }
+  .about-full { background:#13131a; border:1px solid rgba(255,255,255,0.06); padding:24px 28px; margin-top:2px; }
+  .about-two { display:grid; grid-template-columns:1fr 1fr; gap:2px; margin-top:2px; }
+  .tag-list { display:flex; flex-wrap:wrap; gap:6px; margin-top:4px; }
+  .tag { font-size:0.6rem; letter-spacing:1.5px; text-transform:uppercase; padding:4px 12px; border:1px solid rgba(255,255,255,0.1); color:#888; }
+  .tag.green  { border-color:rgba(184,255,87,0.3);  color:#b8ff57; }
+  .tag.blue   { border-color:rgba(87,200,255,0.3);  color:#57c8ff; }
+  .tag.red    { border-color:rgba(255,107,107,0.3); color:#ff6b6b; }
+  .tag.purple { border-color:rgba(199,125,255,0.3); color:#c77dff; }
+
+  /* TALLY */
+  .tally { margin-top:56px; padding-top:22px; border-top:1px solid rgba(255,255,255,0.06); display:flex; gap:40px; flex-wrap:wrap; }
+  .tally-n { font-family:'Syne',sans-serif; font-weight:800; font-size:2.2rem; line-height:1; margin-bottom:5px; }
+  .tally-item:nth-child(1) .tally-n { color:#b8ff57; }
+  .tally-item:nth-child(2) .tally-n { color:#57c8ff; }
+  .tally-item:nth-child(3) .tally-n { color:#ffce57; }
+  .tally-item:nth-child(4) .tally-n { color:#ff6b6b; }
+  .tally-l { font-size:0.55rem; letter-spacing:2px; text-transform:uppercase; color:#444; }
+
+  footer { margin-top:64px; font-size:0.55rem; letter-spacing:2px; text-transform:uppercase; color:#2a2a2a; }
+
+  @media(max-width:600px){
+    nav { padding:0 16px; } .nav-tab { padding:0 12px; font-size:0.52rem; }
+    .inner { padding:48px 16px 80px; }
+    .about-grid { grid-template-columns:1fr; }
+    .about-two  { grid-template-columns:1fr; }
+    .td-host,.td-year,.td-num { display:none; }
+    .stats-row { flex-wrap:wrap; } .stat-cell { flex:1 1 33%; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-logo" id="nav-logo"></div>
+  <div class="nav-tabs">
+    <button class="nav-tab active" onclick="showPage('camps',this)">Camps</button>
+    <button class="nav-tab" onclick="showPage('characters',this)">Characters</button>
+    <button class="nav-tab" onclick="showPage('about',this)">About</button>
+  </div>
+  <div class="nav-status"><div class="dot"></div><span id="nav-status"></span></div>
+</nav>
+
+
+<!-- ══ PAGE: CAMPS ══ -->
+<div class="page active" id="page-camps"><div class="inner">
+  <div class="hero-tag">Object Camp Archive</div>
+  <div class="big-title" id="camps-title"></div>
+  <div class="page-sub" id="camps-sub"></div>
+
+  <div class="stats-row">
+    <div class="stat-cell"><div class="stat-n" id="s-total">0</div><div class="stat-l">Total</div></div>
+    <div class="stat-cell"><div class="stat-n" id="s-ongoing">0</div><div class="stat-l">Ongoing</div></div>
+    <div class="stat-cell"><div class="stat-n" id="s-wins">0</div><div class="stat-l">Wins</div></div>
+    <div class="stat-cell"><div class="stat-n" id="s-chars">0</div><div class="stat-l">Characters</div></div>
+    <div class="stat-cell"><div class="stat-n" id="s-hosting">0</div><div class="stat-l">Hosting</div></div>
+  </div>
+
+  <div class="toolbar">
+    <span class="tool-label">Filter</span>
+    <button class="tool-btn filter-active" onclick="setFilter('all',this)">All</button>
+    <button class="tool-btn" onclick="setFilter('ongoing',this)">Ongoing</button>
+    <button class="tool-btn" onclick="setFilter('finished',this)">Finished</button>
+    <button class="tool-btn" onclick="setFilter('won',this)">Wins</button>
+    <div class="tool-sep"></div>
+    <span class="tool-label">Sort</span>
+    <button class="tool-btn active" onclick="sortBy('default',this)">Default</button>
+    <button class="tool-btn" onclick="sortBy('year',this)">Year</button>
+    <button class="tool-btn" onclick="sortBy('placement',this)">Placement</button>
+    <button class="tool-btn" onclick="sortBy('name',this)">A–Z</button>
+  </div>
+
+  <div class="section-label"><span>Competed In</span><span id="visible-count">—</span></div>
+
+  <div id="camps-container">
+    <div class="cat-group" data-cat="ongoing">
+      <div class="cat-header"><div class="cat-dot" style="background:#57c8ff"></div><div class="cat-title">Ongoing</div><div class="cat-count" id="count-ongoing"></div></div>
+      <table><thead><tr><th>#</th><th>Camp</th><th>Character</th><th>Host</th><th>Year</th><th class="r">Placement</th></tr></thead><tbody id="tbody-ongoing"></tbody></table>
+    </div>
+    <div class="cat-group" data-cat="finished">
+      <div class="cat-header"><div class="cat-dot" style="background:#555"></div><div class="cat-title">Finished</div><div class="cat-count" id="count-finished"></div></div>
+      <table><thead><tr><th>#</th><th>Camp</th><th>Character</th><th>Host</th><th>Year</th><th class="r">Placement</th></tr></thead><tbody id="tbody-finished"></tbody></table>
+    </div>
+  </div>
+  <div class="no-results" id="no-results">No camps match this filter.</div>
+  <div class="hosting-section" id="hosting-el"></div>
+
+  <div class="tally">
+    <div class="tally-item"><div class="tally-n" id="t-total">0</div><div class="tally-l">Camps joined</div></div>
+    <div class="tally-item"><div class="tally-n" id="t-wins">0</div><div class="tally-l">Wins</div></div>
+    <div class="tally-item"><div class="tally-n" id="t-chars">0</div><div class="tally-l">Characters</div></div>
+    <div class="tally-item"><div class="tally-n" id="t-hosting">0</div><div class="tally-l">Hosting</div></div>
+  </div>
+  <footer id="footer1"></footer>
+</div></div>
+
+
+<!-- ══ PAGE: CHARACTERS ══ -->
+<div class="page" id="page-characters"><div class="inner">
+  <div class="hero-tag">Character Gallery</div>
+  <div class="big-title">My OCs<span class="ghost">Characters</span></div>
+  <div class="page-sub" id="chars-sub"></div>
+  <div class="section-label"><span>All Characters</span><span id="char-count">—</span></div>
+  <div class="chars-grid" id="chars-grid"></div>
+  <footer id="footer2"></footer>
+</div></div>
+
+
+<!-- ══ PAGE: ABOUT ══ -->
+<div class="page" id="page-about"><div class="inner">
+  <div class="hero-tag">About Me</div>
+  <div class="big-title" id="about-title"></div>
+  <div class="page-sub" id="about-sub"></div>
+  <div id="about-content"></div>
+  <footer id="footer3"></footer>
+</div></div>
+
+
+<script>
+// ── PLACEMENT HELPERS ──────────────────────────────────────────
+const PLACEMENT_ORDER = { winner:0, "2nd":1, top5:2, merged:3, early:4, tbd:5 };
+const PLACEMENT_LABEL = {
+  winner: '<span class="place-win">Winner ✦</span>',
+  "2nd":  '<span class="place-2nd">2nd place</span>',
+  top5:   '<span class="place-top">Top 5</span>',
+  merged: '<span class="place-mid">Merged</span>',
+  early:  '<span class="place-early">Elim. early</span>',
+  tbd:    '<span class="place-tbd">TBD</span>',
+};
+
+let currentFilter = 'all';
+
+// ── BUILD CAMP ROWS ────────────────────────────────────────────
+function buildRows(data) {
+  ['ongoing','finished'].forEach(cat => {
+    const rows = data.filter(c => c.status === cat);
+    document.getElementById('tbody-'+cat).innerHTML = rows.map((c,i) => `
+      <tr class="camp-row" data-status="${c.status}" data-placement="${c.placement}">
+        <td class="td-num">${String(i+1).padStart(2,'0')}</td>
+        <td class="td-name">${c.name}</td>
+        <td class="td-char"><span class="char-pill">${c.char}</span></td>
+        <td class="td-host">${c.host}</td>
+        <td class="td-year">${c.year}</td>
+        <td class="td-place">${PLACEMENT_LABEL[c.placement]}</td>
+      </tr>`).join('');
+    document.getElementById('count-'+cat).textContent = rows.length + ' camp' + (rows.length!==1?'s':'');
+  });
+}
+
+// ── FILTER ────────────────────────────────────────────────────
+function applyFilter(filter) {
+  currentFilter = filter;
+  let vis = 0;
+  document.querySelectorAll('.camp-row').forEach(r => {
+    let show = true;
+    if (filter==='ongoing')  show = r.dataset.status==='ongoing';
+    if (filter==='finished') show = r.dataset.status==='finished';
+    if (filter==='won')      show = r.dataset.placement==='winner';
+    r.classList.toggle('hidden', !show);
+    if (show) vis++;
+  });
+  ['ongoing','finished'].forEach(cat => {
+    const g = document.querySelector(`[data-cat="${cat}"]`);
+    g.style.display = g.querySelectorAll('.camp-row:not(.hidden)').length===0 ? 'none' : '';
+  });
+  document.getElementById('no-results').style.display = vis===0 ? 'block' : 'none';
+  document.getElementById('visible-count').textContent = vis + ' camp' + (vis!==1?'s':'');
+}
+
+function setFilter(filter, btn) {
+  document.querySelectorAll('.tool-btn[onclick^="setFilter"]').forEach(b => b.classList.remove('filter-active','active'));
+  btn.classList.add('filter-active');
+  applyFilter(filter);
+}
+
+// ── SORT ──────────────────────────────────────────────────────
+function sortBy(mode, btn) {
+  document.querySelectorAll('.tool-btn[onclick^="sortBy"]').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  let sorted = [...CAMPS];
+  if (mode==='year')      sorted.sort((a,b) => b.year - a.year);
+  if (mode==='placement') sorted.sort((a,b) => PLACEMENT_ORDER[a.placement] - PLACEMENT_ORDER[b.placement]);
+  if (mode==='name')      sorted.sort((a,b) => a.name.localeCompare(b.name));
+  buildRows(sorted);
+  applyFilter(currentFilter);
+}
+
+// ── BUILD HOSTING ──────────────────────────────────────────────
+function buildHosting() {
+  if (!HOSTING.length) return;
+  const badge = s => s==='open'
+    ? '<div class="host-status">Open</div>'
+    : `<div class="host-status closed">${s==='finished'?'Finished':'Closed'}</div>`;
+  document.getElementById('hosting-el').innerHTML = `
+    <div class="hosting-header">
+      <div class="cat-dot" style="background:#ff6b6b"></div>
+      <div class="hosting-label">Camps I'm Hosting</div>
+    </div>
+    ${HOSTING.map(h => `
+      <div class="host-card">
+        <div>
+          <div class="host-card-name">${h.name}</div>
+          <div class="host-card-meta">
+            <span>Sign-ups: ${h.signups}</span>
+            <span>Contestants: ${h.contestants}</span>
+            <span>${h.year}</span>
+          </div>
+        </div>
+        ${badge(h.signups)}
+      </div>`).join('')}`;
+}
+
+// ── BUILD CHARACTER GALLERY ────────────────────────────────────
+function buildChars() {
+  document.getElementById('chars-grid').innerHTML = CHARACTERS.map(c => `
+    <div class="char-card">
+      <div class="char-img-wrap">
+        ${c.img
+          ? `<img src="${c.img}" alt="${c.name}">`
+          : `<div class="char-img-placeholder"><div style="font-size:1.4rem">◻</div><div>No image yet</div><div style="font-size:.45rem;opacity:.5">add to images/chars/</div></div>`}
+      </div>
+      <div class="char-info">
+        <div class="char-name">${c.name}</div>
+        <div>${c.camps.map(camp => `<span class="char-camp-tag">${camp}</span>`).join('')}</div>
+      </div>
+    </div>`).join('');
+  document.getElementById('char-count').textContent = CHARACTERS.length + ' characters';
+}
+
+// ── BUILD ABOUT ────────────────────────────────────────────────
+function buildAbout() {
+  const avatar = ME.avatarImg
+    ? `<img src="${ME.avatarImg}" alt="${ME.name}">`
+    : `<div class="about-avatar-placeholder"><div style="font-size:1.4rem">◻</div><div>Set avatarImg in about.js</div></div>`;
+
+  const socialLines = ME.socials.filter(s=>s.value).map(s =>
+    `${s.label}: <span>${s.url ? `<a href="${s.url}" style="color:#e8e6de;text-decoration:none">${s.value}</a>` : s.value}</span>`
+  ).join('<br>');
+
+  document.getElementById('about-content').innerHTML = `
+    <div class="about-grid">
+      <div>
+        <div class="about-avatar-wrap">${avatar}</div>
+      </div>
+      <div class="about-right">
+        <div class="about-block accent">
+          <div class="about-label">Bio</div>
+          <div class="about-value">${ME.bio}</div>
+        </div>
+        <div class="about-block">
+          <div class="about-label">Details</div>
+          <div class="about-value sm">
+            Username: <span>${ME.username}</span><br>
+            Pronouns: <span>${ME.pronouns}</span><br>
+            Active since: <span>${ME.activeSince}</span><br>
+            Favourite camp: <span>${ME.favoriteCamp}</span><br>
+            Favourite character: <span>${ME.favoriteChar}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="about-full">
+      <div class="about-label">Tags</div>
+      <div class="tag-list">${ME.tags.map(t=>`<span class="tag ${t.color}">${t.label}</span>`).join('')}</div>
+    </div>
+    <div class="about-two">
+      <div class="about-block">
+        <div class="about-label">Favourite Things in Camps</div>
+        <div class="about-value sm">${ME.favorites.join('<br>')}</div>
+      </div>
+      <div class="about-block">
+        <div class="about-label">Goals</div>
+        <div class="about-value sm">${ME.goals.join('<br>')}</div>
+      </div>
+    </div>
+    ${socialLines ? `<div class="about-full" style="margin-top:2px">
+      <div class="about-label">Find Me</div>
+      <div class="about-value sm" style="font-size:.8rem;line-height:2.2">${socialLines}</div>
+    </div>` : ''}`;
+}
+
+// ── STATS ──────────────────────────────────────────────────────
+function updateStats() {
+  const wins    = CAMPS.filter(c => c.placement==='winner').length;
+  const ongoing = CAMPS.filter(c => c.status==='ongoing').length;
+  const chars   = new Set(CAMPS.map(c => c.char)).size;
+  document.getElementById('s-total').textContent   = CAMPS.length;
+  document.getElementById('s-ongoing').textContent = ongoing;
+  document.getElementById('s-wins').textContent    = wins;
+  document.getElementById('s-chars').textContent   = chars;
+  document.getElementById('s-hosting').textContent = HOSTING.length;
+  document.getElementById('t-total').textContent   = CAMPS.length;
+  document.getElementById('t-wins').textContent    = wins;
+  document.getElementById('t-chars').textContent   = chars;
+  document.getElementById('t-hosting').textContent = HOSTING.length;
+}
+
+// ── FILL TEXT FROM ME DATA ─────────────────────────────────────
+function fillMeta() {
+  document.title = ME.name + "'s camp log";
+  document.getElementById('nav-logo').textContent    = ME.name;
+  document.getElementById('nav-status').textContent  = ME.status;
+  document.getElementById('camps-title').innerHTML   = ME.name + '<span class="ghost">Camps</span>';
+  document.getElementById('camps-sub').textContent   = ME.username + ' · all camps · all characters · all placements';
+  document.getElementById('chars-sub').textContent   = ME.username + ' · every character across all camps';
+  document.getElementById('about-title').innerHTML   = ME.name + '<span class="ghost">Profile</span>';
+  document.getElementById('about-sub').textContent   = ME.username + ' · object camp competitor';
+  ['footer1','footer2','footer3'].forEach(id => document.getElementById(id).textContent = ME.footerText);
+}
+
+// ── PAGE SWITCHER ──────────────────────────────────────────────
+function showPage(name, btn) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-tab').forEach(b => b.classList.remove('active'));
+  document.getElementById('page-'+name).classList.add('active');
+  btn.classList.add('active');
+}
+
+// ── INIT ───────────────────────────────────────────────────────
+fillMeta();
+buildRows(CAMPS);
+applyFilter('all');
+updateStats();
+buildHosting();
+buildChars();
+buildAbout();
+document.getElementById('visible-count').textContent = CAMPS.length + ' camps';
+</script>
+</body>
+</html>
