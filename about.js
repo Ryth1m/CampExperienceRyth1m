@@ -47,7 +47,7 @@ const ME = {
     "Win 5 camps total",
     "Make season 2 of my camp",
     "More friends",
-    "Get to atleast top 10",
+    "Get to atleast top 10 in 2026",
   ],
 
   // ── SOCIALS ────────────────────────────────────────────
