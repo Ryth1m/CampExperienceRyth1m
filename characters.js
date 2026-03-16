@@ -13,29 +13,14 @@
 
 const CHARACTERS = [
   {
-    name:  "Character Name",
+    name:  "Stary",
     img:   "",
     camps: ["Camp A", "Camp B"],
   },
   {
-    name:  "Character Name",
+    name:  "Tivo",
     img:   "",
     camps: ["Camp C"],
-  },
-  {
-    name:  "Character Name",
-    img:   "",
-    camps: ["Camp D", "Camp E", "Camp F"],
-  },
-  {
-    name:  "Character Name",
-    img:   "",
-    camps: ["Camp G"],
-  },
-  {
-    name:  "Character Name",
-    img:   "",
-    camps: ["Camp H"],
   },
   // ← copy the block above (from { to },) and paste here to add a new character
 ];
