@@ -37,12 +37,12 @@
 
 const CAMPS = [
   { name: "COP 1",           char: "Stary",        host: "Chipy",           year: "2023", status: "finished",    placement: "forgot"     },
-  { name: "COP 2",           char: "Stary",        host: "Chipy",           year: "2023", status: "finished",    placement: "forgot"     },
-  { name: "COP 3",           char: "Stary",        host: "Chipy",           year: "2023", status: "finished",    placement: "forgot"     },
-  { name: "COP 4",           char: "Stary",        host: "Chipy",           year: "2024", status: "finished",    placement: "forgot"     },
-  { name: "COP 5",           char: "Stary",        host: "Chipy",           year: "2024", status: "finished",    placement: "forgot"     },
-  { name: "COP 7",           char: "Stary",        host: "Chipy",           year: "2025", status: "finished",    placement: "forgot"     },
-  { name: "COP 8",           char: "Stary",        host: "Chipy",           year: "2026", status: "finished",    placement: "forgot"     },
+  { name: "COP 2",           char: "Stary",        host: "Chipy",           year: "2023", status: "finished",    placement: "6th"     },
+  { name: "COP 3",           char: "Stary",        host: "Chipy",           year: "2023", status: "finished",    placement: "8th"     },
+  { name: "COP 4",           char: "Stary",        host: "Chipy",           year: "2024", status: "finished",    placement: "3rd"     },
+  { name: "COP 5",           char: "Stary",        host: "Chipy",           year: "2024", status: "finished",    placement: "5th"     },
+  { name: "COP 7",           char: "Stary",        host: "Chipy",           year: "2025", status: "finished",    placement: "6th"     },
+  { name: "COP 8",           char: "Stary",        host: "Chipy",           year: "2026", status: "finished",    placement: "banned"     },
   { name: "cw#p 12",         char: "Tivo",         host: "bald guy",        year: "2026", status: "finished",    placement: "2nd"        },
   { name: "cw#p 13",         char: "Paper Stary",  host: "bald guy",        year: "2026", status: "finished",    placement: "14th"       },
   { name: "cw#p 14",         char: "Tivo",         host: "bald guy",        year: "2026", status: "finished",    placement: "7th (DNP)"  },
