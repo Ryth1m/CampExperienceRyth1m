@@ -22,5 +22,10 @@ const CHARACTERS = [
     img:   "",
     camps: ["Camp C"],
   },
+  {
+    name:  "Paper Stary",
+    img:   "",
+    camps: ["CW#P 13"],
+  },
   // ← copy the block above (from { to },) and paste here to add a new character
 ];
