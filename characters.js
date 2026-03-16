@@ -1,24 +1,20 @@
-// ═══════════════════════════════════════════════
-//  CHARACTERS.JS — edit your characters here!
-// ═══════════════════════════════════════════════
-//
-//  img: path to the character image in your repo
-//       put images in the images/chars/ folder
-//       e.g. "images/chars/eraser.png"
-//       leave as "" if you have no image yet
-//
-//  camps: list of camp names this OC appeared in
-//         add as many camps as you like!
-//
-//  To add a character: copy any block and fill it in!
-//  To remove a character: delete the block.
-//
-// ═══════════════════════════════════════════════
+// ╔═══════════════════════════════════════════════════════╗
+// ║                   characters.js                      ║
+// ║  Edit this file to add / remove / update characters  ║
+// ╚═══════════════════════════════════════════════════════╝
+
+// ── MY CHARACTERS ────────────────────────────────────────
+// name:  the character's name
+// img:   path to the image in your GitHub repo
+//        → put images in an "images/chars/" folder
+//        → example: "images/chars/eraser.png"
+//        → leave as "" to show a placeholder box
+// camps: list of camp names this character appeared in
 
 const CHARACTERS = [
   {
     name:  "Character Name",
-    img:   "",                       // e.g. "images/chars/mychar.png"
+    img:   "",
     camps: ["Camp A", "Camp B"],
   },
   {
@@ -41,10 +37,5 @@ const CHARACTERS = [
     img:   "",
     camps: ["Camp H"],
   },
-  {
-    name:  "Character Name",
-    img:   "",
-    camps: ["Camp I"],
-  },
-  // ← copy any block above to add more characters
+  // ← copy the block above (from { to },) and paste here to add a new character
 ];
