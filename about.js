@@ -16,7 +16,7 @@ const ME = {
   // ── ABOUT PAGE ─────────────────────────────────────────
   bio: "Hello! I have seen people make google documents about their camp experiences, so I decided to make a whole website about mine! :D",
 
-  favoriteCamp: "BFTTD",
+  favoriteCamp: "All of them (expect COP)",
   favoriteChar: "BFDI: Leafy, Coiny; TPOT: Book, Two, Price tag, Black hole, Marker, Tree; BFDIE: Furn, Sticker;",
 
   // avatar image — put your image in an "images/" folder on GitHub
