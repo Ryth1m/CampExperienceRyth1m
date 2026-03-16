@@ -22,7 +22,7 @@ const ME = {
   // avatar image — put your image in an "images/" folder on GitHub
   // example: "images/avatar.png"
   // leave as "" to show a placeholder
-  avatarImg: "avatar.png",
+  avatarImg: "images/avatar.png",
 
   // ── TAGS ───────────────────────────────────────────────
   // color options: "green" | "blue" | "red" | "purple" | "" (grey)
@@ -30,7 +30,7 @@ const ME = {
   tags: [
     { label: "Object Camp Fan", color: "green"  },
     { label: "Competitor",      color: "blue"   },
-    { label: "Host",            color: "yellow"    },
+    { label: "Host",            color: "red"    },
   ],
 
   // ── FAVOURITE THINGS ───────────────────────────────────
