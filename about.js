@@ -1,34 +1,32 @@
-// ═══════════════════════════════════════════════
-//  ABOUT.JS — edit your personal info here!
-// ═══════════════════════════════════════════════
+// ╔═══════════════════════════════════════════════════════╗
+// ║                     about.js                         ║
+// ║       Edit this file to update your profile          ║
+// ╚═══════════════════════════════════════════════════════╝
 
 const ME = {
 
-  // ── BASIC INFO ──────────────────────────────
-  name:        "Your Name",          // shown in big headings across the site
-  username:    "@username",          // shown in subtitles
-  pronouns:    "they/them",
-  activeSince: "2021",               // year you started doing object camps
-  status:      "Active",             // shown in the top nav — e.g. "Active" "Hiatus" "Retired"
-  footerText:  "still broadcasting · 2025",
+  // ── BASICS ─────────────────────────────────────────────
+  name:         "Your Name",          // big heading on every page
+  username:     "@username",          // shown in subtitles
+  pronouns:     "they/them",
+  activeSince:  "2021",               // year you started doing object camps
+  status:       "Active",             // shown in the top-right nav dot
+  footerText:   "still broadcasting · 2025",
 
-  // ── AVATAR IMAGE ────────────────────────────
-  // put your image in the images/ folder in your repo
-  // then set the path here, e.g. "images/avatar.png"
-  // leave as "" to show a placeholder
-  avatarImg:   "",
-
-  // ── BIO ─────────────────────────────────────
-  // write as much or as little as you want!
+  // ── ABOUT PAGE ─────────────────────────────────────────
   bio: "Write something about yourself here — who you are, how you got into object camps, what you love about them, anything!",
 
-  // ── FAVOURITES ──────────────────────────────
   favoriteCamp: "Camp Name Here",
   favoriteChar: "Character Name Here",
 
-  // ── TAGS ────────────────────────────────────
-  // color options: "green" "blue" "red" "purple" ""(grey)
-  // add or remove as many tags as you want!
+  // avatar image — put your image in an "images/" folder on GitHub
+  // example: "images/avatar.png"
+  // leave as "" to show a placeholder
+  avatarImg: "",
+
+  // ── TAGS ───────────────────────────────────────────────
+  // color options: "green" | "blue" | "red" | "purple" | "" (grey)
+  // add or remove as many tags as you like
   tags: [
     { label: "Object Camp Fan", color: "green"  },
     { label: "Competitor",      color: "blue"   },
@@ -36,8 +34,8 @@ const ME = {
     { label: "Add your own",    color: ""       },
   ],
 
-  // ── FAVOURITE THINGS IN CAMPS ───────────────
-  // add or remove lines freely!
+  // ── FAVOURITE THINGS ───────────────────────────────────
+  // just a list of things you enjoy about camps
   favorites: [
     "Team challenges",
     "Designing my OC",
@@ -45,7 +43,7 @@ const ME = {
     "Making alliances",
   ],
 
-  // ── GOALS ───────────────────────────────────
+  // ── GOALS ──────────────────────────────────────────────
   goals: [
     "Win 5 camps total",
     "Host my own camp",
@@ -53,13 +51,13 @@ const ME = {
     "Make top 3 in every camp",
   ],
 
-  // ── SOCIAL LINKS ────────────────────────────
+  // ── SOCIALS ────────────────────────────────────────────
   // leave url as "" if you don't want it to be a clickable link
-  // delete a whole block to hide that platform
+  // delete a whole line if you don't use that platform
   socials: [
-    { label: "Discord", value: "yourtag#0000",            url: ""  },
-    { label: "YouTube", value: "youtube.com/yourchannel", url: ""  },
-    { label: "Twitter", value: "@yourhandle",             url: ""  },
+    { label: "Discord",  value: "yourtag#0000",          url: "" },
+    { label: "YouTube",  value: "youtube.com/yourchannel", url: "" },
+    { label: "Twitter",  value: "@yourhandle",            url: "" },
   ],
 
 };
