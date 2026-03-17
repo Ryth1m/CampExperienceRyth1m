@@ -15,11 +15,11 @@
 const GALLERY = [
   {
     title:  "Stary Ref Sheet",
-    img:    "",                    // e.g. "images/gallery/stary_ref.png"
+    img:    "images/gallery/StarySUCNormal.png",                    // e.g. "images/gallery/stary_ref.png"
     type:   "ref",
     char:   "Stary",              // which character this is of
     artist: "Ryth1m",             // who drew it (you or someone else)
-    note:   "Official reference sheet for Stary!",
+    note:   "Official reference sheet of Stary for my show 'SUC'!",
   },
   {
     title:  "Tivo Fanart",
