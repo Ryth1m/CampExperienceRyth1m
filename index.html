@@ -5,20 +5,16 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>camp log</title>
 <link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Syne:wght@700;800&display=swap" rel="stylesheet">
-
-<!-- ╔══════════════════════════════════════════════════════╗ -->
-<!-- ║  Your data files — loaded here, edit them directly  ║ -->
-<!-- ╚══════════════════════════════════════════════════════╝ -->
 <script src="about.js"></script>
 <script src="camps.js"></script>
 <script src="characters.js"></script>
-
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body { background: #0d0d10; font-family: 'Space Mono', monospace; color: #e8e6de; min-height: 100vh; }
   body::before { content:''; position:fixed; inset:0; background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,0.05) 2px,rgba(0,0,0,0.05) 4px); pointer-events:none; z-index:999; }
-  @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.15} }
-  @keyframes fadeIn { from{opacity:0;transform:translateY(8px)} to{opacity:1;transform:translateY(0)} }
+  @keyframes blink   { 0%,100%{opacity:1} 50%{opacity:0.15} }
+  @keyframes fadeIn  { from{opacity:0;transform:translateY(8px)} to{opacity:1;transform:translateY(0)} }
+  @keyframes modalIn { from{opacity:0;transform:translateY(20px)} to{opacity:1;transform:translateY(0)} }
 
   /* NAV */
   nav { position:sticky; top:0; z-index:100; background:rgba(13,13,16,0.97); backdrop-filter:blur(12px); border-bottom:1px solid rgba(255,255,255,0.07); display:flex; align-items:center; justify-content:space-between; padding:0 40px; height:54px; gap:16px; }
@@ -106,14 +102,67 @@
 
   /* CHARACTER GALLERY */
   .chars-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(200px,1fr)); gap:2px; }
-  .char-card { background:#13131a; border:1px solid rgba(255,255,255,0.06); overflow:hidden; transition:border-color 0.15s,background 0.15s; }
-  .char-card:hover { background:#1a1a24; border-color:rgba(255,255,255,0.14); }
-  .char-img-wrap { aspect-ratio:1; background:#0d0d10; border-bottom:1px solid rgba(255,255,255,0.06); overflow:hidden; display:flex; align-items:center; justify-content:center; }
+  .char-card { background:#13131a; border:1px solid rgba(255,255,255,0.06); overflow:hidden; transition:border-color 0.2s, background 0.2s, transform 0.2s; cursor:pointer; }
+  .char-card:hover { background:#1a1a24; border-color:#b8ff57; transform:translateY(-2px); }
+  .char-img-wrap { aspect-ratio:1; background:#0d0d10; border-bottom:1px solid rgba(255,255,255,0.06); overflow:hidden; display:flex; align-items:center; justify-content:center; position:relative; }
   .char-img-wrap img { width:100%; height:100%; object-fit:cover; }
   .char-img-placeholder { display:flex; flex-direction:column; align-items:center; gap:6px; color:#2a2a2a; font-size:0.52rem; letter-spacing:2px; text-transform:uppercase; }
+  .char-card-hint { position:absolute; bottom:0; left:0; right:0; background:rgba(184,255,87,0.12); border-top:1px solid rgba(184,255,87,0.2); padding:6px; text-align:center; font-size:0.52rem; letter-spacing:2px; text-transform:uppercase; color:#b8ff57; opacity:0; transition:opacity 0.2s; }
+  .char-card:hover .char-card-hint { opacity:1; }
   .char-info { padding:14px 16px 16px; }
   .char-name { font-family:'Syne',sans-serif; font-weight:700; font-size:0.9rem; margin-bottom:6px; }
   .char-camp-tag { display:inline-block; border:1px solid rgba(255,255,255,0.08); color:#b8ff57; padding:1px 8px; font-size:0.55rem; letter-spacing:1px; margin:2px 2px 2px 0; }
+
+  /* LORE MODAL */
+  .modal-overlay {
+    position:fixed; inset:0; background:rgba(0,0,0,0.85); z-index:500;
+    display:flex; align-items:center; justify-content:center; padding:20px;
+    opacity:0; pointer-events:none; transition:opacity 0.2s;
+  }
+  .modal-overlay.open { opacity:1; pointer-events:all; }
+  .modal {
+    background:#13131a; border:1px solid rgba(255,255,255,0.1);
+    width:100%; max-width:720px; max-height:90vh;
+    overflow-y:auto; animation:modalIn 0.25s ease both;
+    position:relative;
+  }
+  .modal-header {
+    position:sticky; top:0; background:#13131a;
+    border-bottom:1px solid rgba(255,255,255,0.07);
+    padding:20px 24px; display:flex; align-items:center; gap:16px; z-index:10;
+  }
+  .modal-header-img {
+    width:52px; height:52px; object-fit:cover;
+    border:1px solid rgba(255,255,255,0.1); flex-shrink:0;
+    background:#0d0d10;
+  }
+  .modal-header-name { font-family:'Syne',sans-serif; font-weight:800; font-size:1.4rem; text-transform:uppercase; letter-spacing:-1px; }
+  .modal-header-camps { font-size:0.58rem; letter-spacing:2px; text-transform:uppercase; color:#555; margin-top:4px; }
+  .modal-close {
+    margin-left:auto; font-family:'Space Mono',monospace; font-size:0.6rem;
+    letter-spacing:2px; text-transform:uppercase; background:transparent;
+    border:1px solid rgba(255,255,255,0.1); color:#555; padding:6px 14px;
+    cursor:pointer; transition:all 0.15s; flex-shrink:0;
+  }
+  .modal-close:hover { color:#e8e6de; border-color:rgba(255,255,255,0.3); }
+  .modal-body { padding:24px; }
+  .lore-section { margin-bottom:28px; }
+  .lore-section:last-child { margin-bottom:0; }
+  .lore-label { font-size:0.58rem; letter-spacing:3px; text-transform:uppercase; color:#b8ff57; margin-bottom:10px; padding-bottom:8px; border-bottom:1px solid rgba(255,255,255,0.05); }
+  .lore-text { font-size:0.82rem; line-height:1.85; color:#aaa; }
+  .lore-grid { display:grid; grid-template-columns:1fr 1fr; gap:2px; }
+  .lore-block { background:#0d0d10; padding:14px 16px; border:1px solid rgba(255,255,255,0.05); }
+  .lore-block-label { font-size:0.55rem; letter-spacing:2px; text-transform:uppercase; color:#555; margin-bottom:6px; }
+  .lore-block-value { font-size:0.8rem; line-height:1.6; color:#e8e6de; }
+  .ally-item { padding:14px 0; border-bottom:1px solid rgba(255,255,255,0.04); display:flex; gap:14px; }
+  .ally-item:last-child { border-bottom:none; }
+  .ally-name { font-family:'Syne',sans-serif; font-weight:700; font-size:0.82rem; color:#b8ff57; min-width:100px; flex-shrink:0; }
+  .ally-desc { font-size:0.78rem; line-height:1.7; color:#888; }
+  .misc-item { padding:12px 0; border-bottom:1px solid rgba(255,255,255,0.04); }
+  .misc-item:last-child { border-bottom:none; }
+  .misc-q { font-size:0.72rem; color:#555; margin-bottom:4px; }
+  .misc-a { font-size:0.82rem; line-height:1.7; color:#e8e6de; }
+  .no-lore { text-align:center; padding:32px; font-size:0.65rem; letter-spacing:2px; text-transform:uppercase; color:#333; }
 
   /* ABOUT */
   .about-grid { display:grid; grid-template-columns:220px 1fr; gap:2px; }
@@ -154,10 +203,20 @@
     .about-two  { grid-template-columns:1fr; }
     .td-host,.td-year,.td-num { display:none; }
     .stats-row { flex-wrap:wrap; } .stat-cell { flex:1 1 33%; }
+    .lore-grid { grid-template-columns:1fr; }
+    .modal { max-height:95vh; }
   }
 </style>
 </head>
 <body>
+
+<!-- LORE MODAL -->
+<div class="modal-overlay" id="modal-overlay" onclick="closeModal(event)">
+  <div class="modal" id="modal">
+    <div class="modal-header" id="modal-header"></div>
+    <div class="modal-body" id="modal-body"></div>
+  </div>
+</div>
 
 <nav>
   <div class="nav-logo" id="nav-logo"></div>
@@ -252,9 +311,9 @@
 <script>
 // ── PLACEMENT HELPERS ──────────────────────────────────────────
 const PLACEMENT_ORDER = {
-  winner:0, "2nd":1, "3rd":2, "4th":3, "5th":4, "6th":5, "7th":6,
-  "8th":7, "9th":8, "10th":9, "11th":10, "12th":11, "13th":12, "14th":13,
-  merged:14, premerge:15, forgot:16, dnp:17, banned:18, quit:19, tbd:20,
+  winner:0,"2nd":1,"3rd":2,"4th":3,"5th":4,"6th":5,"7th":6,
+  "8th":7,"9th":8,"10th":9,"11th":10,"12th":11,"13th":12,"14th":13,
+  merged:14,premerge:15,forgot:16,dnp:17,banned:18,quit:19,tbd:20,
 };
 const PLACEMENT_LABEL = {
   winner:   '<span class="place-win">Winner ✦</span>',
@@ -279,22 +338,22 @@ const PLACEMENT_LABEL = {
   quit:     '<span class="place-early">Quit</span>',
   tbd:      '<span class="place-tbd">TBD</span>',
 };
-// anything not in the list above shows as-is in grey (e.g. "7th (DNP)")
 function getPlacementLabel(p) {
   return PLACEMENT_LABEL[p] || `<span class="place-early">${p}</span>`;
+}
+
+// ── STATUS NORMALISER ──────────────────────────────────────────
+function normaliseStatus(s) {
+  const lower = (s||'').toLowerCase().trim();
+  if (['finished','done','complete'].includes(lower))                          return 'finished';
+  if (['ongoing','active','in progress'].includes(lower))                      return 'ongoing';
+  if (['didnt start',"didn't start",'not started','dropped'].includes(lower)) return 'didntstart';
+  return lower;
 }
 
 let currentFilter = 'all';
 
 // ── BUILD CAMP ROWS ────────────────────────────────────────────
-function normaliseStatus(s) {
-  const lower = (s||'').toLowerCase().trim();
-  if (['finished','done','complete'].includes(lower)) return 'finished';
-  if (['ongoing','active','in progress'].includes(lower)) return 'ongoing';
-  if (['didnt start',"didn't start",'not started','dropped'].includes(lower)) return 'didntstart';
-  return lower;
-}
-
 function buildRows(data) {
   ['ongoing','finished','didntstart'].forEach(cat => {
     const tbody = document.getElementById('tbody-'+cat);
@@ -320,18 +379,18 @@ function applyFilter(filter) {
   let vis = 0;
   document.querySelectorAll('.camp-row').forEach(r => {
     let show = true;
-    if (filter==='ongoing')     show = r.dataset.status==='ongoing';
-    if (filter==='finished')    show = r.dataset.status==='finished';
-    if (filter==='didntstart')  show = r.dataset.status==='didntstart';
-    if (filter==='won')         show = r.dataset.placement==='winner';
+    if (filter==='ongoing')    show = r.dataset.status==='ongoing';
+    if (filter==='finished')   show = r.dataset.status==='finished';
+    if (filter==='didntstart') show = r.dataset.status==='didntstart';
+    if (filter==='won')        show = r.dataset.placement==='winner';
     r.classList.toggle('hidden', !show);
     if (show) vis++;
   });
   ['ongoing','finished','didntstart'].forEach(cat => {
     const g = document.querySelector(`[data-cat="${cat}"]`);
-    if (g) g.style.display = g.querySelectorAll('.camp-row:not(.hidden)').length===0 ? 'none' : '';
+    if (g) g.style.display = g.querySelectorAll('.camp-row:not(.hidden)').length===0 ? 'none':'';
   });
-  document.getElementById('no-results').style.display = vis===0 ? 'block' : 'none';
+  document.getElementById('no-results').style.display = vis===0 ? 'block':'none';
   document.getElementById('visible-count').textContent = vis + ' camp' + (vis!==1?'s':'');
 }
 
@@ -353,7 +412,7 @@ function sortBy(mode, btn) {
   applyFilter(currentFilter);
 }
 
-// ── BUILD HOSTING ──────────────────────────────────────────────
+// ── HOSTING ───────────────────────────────────────────────────
 function buildHosting() {
   if (!HOSTING.length) return;
   const badge = s => s==='open'
@@ -364,7 +423,7 @@ function buildHosting() {
       <div class="cat-dot" style="background:#ff6b6b"></div>
       <div class="hosting-label">Camps I'm Hosting</div>
     </div>
-    ${HOSTING.map(h => `
+    ${HOSTING.map(h=>`
       <div class="host-card">
         <div>
           <div class="host-card-name">${h.name}</div>
@@ -378,43 +437,114 @@ function buildHosting() {
       </div>`).join('')}`;
 }
 
-// ── BUILD CHARACTER GALLERY ────────────────────────────────────
+// ── CHARACTER GALLERY ─────────────────────────────────────────
+function hasLore(c) {
+  return (c.species||c.gender||c.age||c.appearance||c.personality||
+          c.backstory||c.abilities||(c.facts&&c.facts.length));
+}
+
 function buildChars() {
-  document.getElementById('chars-grid').innerHTML = CHARACTERS.map(c => `
-    <div class="char-card">
+  document.getElementById('chars-grid').innerHTML = CHARACTERS.map((c,i) => `
+    <div class="char-card" onclick="openLore(${i})">
       <div class="char-img-wrap">
-        ${c.img
-          ? `<img src="${c.img}" alt="${c.name}" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">`
-          : ''}
+        ${c.img ? `<img src="${c.img}" alt="${c.name}" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">` : ''}
         <div class="char-img-placeholder" style="${c.img?'display:none':''}">
           <div style="font-size:1.4rem">◻</div>
-          <div>${c.img ? 'Image not found' : 'No image yet'}</div>
-          <div style="font-size:.45rem;opacity:.5">${c.img ? c.img : 'add path in characters.js'}</div>
+          <div>${c.img?'Image not found':'No image yet'}</div>
         </div>
+        ${hasLore(c) ? '<div class="char-card-hint">View Lore →</div>' : ''}
       </div>
       <div class="char-info">
         <div class="char-name">${c.name}</div>
-        <div>${c.camps.map(camp => `<span class="char-camp-tag">${camp}</span>`).join('')}</div>
+        <div>${c.camps.map(camp=>`<span class="char-camp-tag">${camp}</span>`).join('')}</div>
       </div>
     </div>`).join('');
   document.getElementById('char-count').textContent = CHARACTERS.length + ' characters';
 }
 
-// ── BUILD ABOUT ────────────────────────────────────────────────
+// ── LORE MODAL ────────────────────────────────────────────────
+function openLore(i) {
+  const c = CHARACTERS[i];
+
+  const thumb = c.img
+    ? `<img class="modal-header-img" src="${c.img}" alt="${c.name}" onerror="this.style.display='none'">`
+    : `<div class="modal-header-img" style="display:flex;align-items:center;justify-content:center;color:#333;font-size:1.2rem">◻</div>`;
+
+  document.getElementById('modal-header').innerHTML = `
+    ${thumb}
+    <div>
+      <div class="modal-header-name">${c.name}</div>
+      <div class="modal-header-camps">${c.camps.join(' · ')}</div>
+    </div>
+    <button class="modal-close" onclick="closeLore()">[ Close ]</button>`;
+
+  let body = '';
+
+  // basic info grid
+  const basics = [
+    c.species && { label:'Species',  val:c.species },
+    c.gender  && { label:'Gender',   val:c.gender  },
+    c.age     && { label:'Age',      val:c.age     },
+  ].filter(Boolean);
+  if (basics.length || c.appearance) {
+    body += `<div class="lore-section">
+      <div class="lore-label">Basic Info</div>
+      ${basics.length ? `<div class="lore-grid" style="margin-bottom:${c.appearance?'12px':'0'}">
+        ${basics.map(b=>`<div class="lore-block"><div class="lore-block-label">${b.label}</div><div class="lore-block-value">${b.val}</div></div>`).join('')}
+      </div>` : ''}
+      ${c.appearance ? `<div class="lore-block" style="margin-top:2px"><div class="lore-block-label">Appearance</div><div class="lore-block-value">${c.appearance}</div></div>` : ''}
+    </div>`;
+  }
+
+  // text sections
+  [
+    c.personality && { label:'Personality',  val:c.personality },
+    c.backstory   && { label:'Backstory',     val:c.backstory   },
+    c.abilities   && { label:'Abilities',     val:c.abilities   },
+  ].filter(Boolean).forEach(s => {
+    body += `<div class="lore-section"><div class="lore-label">${s.label}</div><div class="lore-text">${s.val}</div></div>`;
+  });
+
+  // fun facts
+  if (c.facts && c.facts.length) {
+    body += `<div class="lore-section"><div class="lore-label">Fun Facts</div>
+      ${c.facts.map(f=>`<div class="misc-item"><div class="misc-a">✦ ${f}</div></div>`).join('')}
+    </div>`;
+  }
+
+  if (!body) {
+    body = `<div class="no-lore">No lore written yet.<br><br>Add it in characters.js!</div>`;
+  }
+
+  document.getElementById('modal-body').innerHTML = body;
+  document.getElementById('modal-overlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeLore() {
+  document.getElementById('modal-overlay').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+function closeModal(e) {
+  if (e.target === document.getElementById('modal-overlay')) closeLore();
+}
+
+document.addEventListener('keydown', e => { if (e.key==='Escape') closeLore(); });
+
+// ── ABOUT ─────────────────────────────────────────────────────
 function buildAbout() {
   const avatar = ME.avatarImg
     ? `<img src="${ME.avatarImg}" alt="${ME.name}" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"><div class="about-avatar-placeholder" style="display:none"><div style="font-size:1.4rem">◻</div><div>Image not found</div><div style="font-size:.45rem;opacity:.5">${ME.avatarImg}</div></div>`
     : `<div class="about-avatar-placeholder"><div style="font-size:1.4rem">◻</div><div>Set avatarImg in about.js</div></div>`;
 
   const socialLines = ME.socials.filter(s=>s.value).map(s =>
-    `${s.label}: <span>${s.url ? `<a href="${s.url}" style="color:#e8e6de;text-decoration:none">${s.value}</a>` : s.value}</span>`
+    `${s.label}: <span>${s.url?`<a href="${s.url}" style="color:#e8e6de;text-decoration:none">${s.value}</a>`:s.value}</span>`
   ).join('<br>');
 
   document.getElementById('about-content').innerHTML = `
     <div class="about-grid">
-      <div>
-        <div class="about-avatar-wrap">${avatar}</div>
-      </div>
+      <div><div class="about-avatar-wrap">${avatar}</div></div>
       <div class="about-right">
         <div class="about-block accent">
           <div class="about-label">Bio</div>
@@ -446,17 +576,17 @@ function buildAbout() {
         <div class="about-value sm">${ME.goals.join('<br>')}</div>
       </div>
     </div>
-    ${socialLines ? `<div class="about-full" style="margin-top:2px">
+    ${socialLines?`<div class="about-full" style="margin-top:2px">
       <div class="about-label">Find Me</div>
       <div class="about-value sm" style="font-size:.8rem;line-height:2.2">${socialLines}</div>
-    </div>` : ''}`;
+    </div>`:''}`;
 }
 
-// ── STATS ──────────────────────────────────────────────────────
+// ── STATS ─────────────────────────────────────────────────────
 function updateStats() {
-  const wins    = CAMPS.filter(c => c.placement==='winner').length;
-  const ongoing = CAMPS.filter(c => normaliseStatus(c.status)==='ongoing').length;
-  const chars   = new Set(CAMPS.map(c => c.char)).size;
+  const wins    = CAMPS.filter(c=>c.placement==='winner').length;
+  const ongoing = CAMPS.filter(c=>normaliseStatus(c.status)==='ongoing').length;
+  const chars   = new Set(CAMPS.map(c=>c.char)).size;
   document.getElementById('s-total').textContent   = CAMPS.length;
   document.getElementById('s-ongoing').textContent = ongoing;
   document.getElementById('s-wins').textContent    = wins;
@@ -468,28 +598,28 @@ function updateStats() {
   document.getElementById('t-hosting').textContent = HOSTING.length;
 }
 
-// ── FILL TEXT FROM ME DATA ─────────────────────────────────────
+// ── META ──────────────────────────────────────────────────────
 function fillMeta() {
   document.title = ME.name + "'s camp log";
-  document.getElementById('nav-logo').textContent    = ME.name;
-  document.getElementById('nav-status').textContent  = ME.status;
-  document.getElementById('camps-title').innerHTML   = ME.name + '<span class="ghost">Camps</span>';
-  document.getElementById('camps-sub').textContent   = ME.username + ' · all camps · all characters · all placements';
-  document.getElementById('chars-sub').textContent   = ME.username + ' · every character across all camps';
-  document.getElementById('about-title').innerHTML   = ME.name + '<span class="ghost">Profile</span>';
-  document.getElementById('about-sub').textContent   = ME.username + ' · object camp competitor';
+  document.getElementById('nav-logo').textContent   = ME.name;
+  document.getElementById('nav-status').textContent = ME.status;
+  document.getElementById('camps-title').innerHTML  = ME.name + '<span class="ghost">Camps</span>';
+  document.getElementById('camps-sub').textContent  = ME.username + ' · all camps · all characters · all placements';
+  document.getElementById('chars-sub').textContent  = ME.username + ' · every character across all camps';
+  document.getElementById('about-title').innerHTML  = ME.name + '<span class="ghost">Profile</span>';
+  document.getElementById('about-sub').textContent  = ME.username + ' · object camp competitor';
   ['footer1','footer2','footer3'].forEach(id => document.getElementById(id).textContent = ME.footerText);
 }
 
-// ── PAGE SWITCHER ──────────────────────────────────────────────
+// ── PAGE SWITCHER ─────────────────────────────────────────────
 function showPage(name, btn) {
-  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-  document.querySelectorAll('.nav-tab').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.nav-tab').forEach(b=>b.classList.remove('active'));
   document.getElementById('page-'+name).classList.add('active');
   btn.classList.add('active');
 }
 
-// ── INIT ───────────────────────────────────────────────────────
+// ── INIT ──────────────────────────────────────────────────────
 fillMeta();
 buildRows(CAMPS);
 applyFilter('all');
