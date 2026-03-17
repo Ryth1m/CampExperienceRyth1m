@@ -8,6 +8,7 @@
 <script src="about.js"></script>
 <script src="camps.js"></script>
 <script src="characters.js"></script>
+<script src="servers.js"></script>
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body { background: #0d0d10; font-family: 'Space Mono', monospace; color: #e8e6de; min-height: 100vh; }
@@ -99,6 +100,39 @@
   .host-card-meta { font-size:0.6rem; letter-spacing:1.5px; text-transform:uppercase; color:#555; display:flex; gap:18px; flex-wrap:wrap; }
   .host-status { font-size:0.58rem; letter-spacing:2px; text-transform:uppercase; padding:4px 12px; border:1px solid #ff6b6b; color:#ff6b6b; white-space:nowrap; }
   .host-status.closed { border-color:#444; color:#444; }
+
+  /* SERVER CARDS */
+  .servers-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(280px,1fr)); gap:2px; margin-bottom:48px; }
+  .server-card { background:#13131a; border:1px solid rgba(255,255,255,0.06); padding:24px; transition:background 0.15s, border-color 0.15s; display:flex; flex-direction:column; gap:14px; }
+  .server-card:hover { background:#1a1a24; border-color:rgba(255,255,255,0.12); }
+  .server-card-top { display:flex; align-items:center; gap:14px; }
+  .server-icon { width:48px; height:48px; border-radius:12px; background:#0d0d10; border:1px solid rgba(255,255,255,0.08); flex-shrink:0; overflow:hidden; display:flex; align-items:center; justify-content:center; color:#333; font-size:1.2rem; }
+  .server-icon img { width:100%; height:100%; object-fit:cover; }
+  .server-name { font-family:'Syne',sans-serif; font-weight:700; font-size:1rem; margin-bottom:4px; }
+  .server-badges { display:flex; gap:6px; flex-wrap:wrap; }
+  .server-badge { font-size:0.52rem; letter-spacing:1.5px; text-transform:uppercase; padding:2px 8px; border:1px solid currentColor; }
+  .badge-camp      { color:#b8ff57; border-color:rgba(184,255,87,0.3); }
+  .badge-community { color:#57c8ff; border-color:rgba(87,200,255,0.3); }
+  .badge-personal  { color:#c77dff; border-color:rgba(199,125,255,0.3); }
+  .badge-collab    { color:#ffce57; border-color:rgba(255,206,87,0.3); }
+  .badge-friend    { color:#ff9f57; border-color:rgba(255,159,87,0.3); }
+  .badge-other     { color:#888;    border-color:rgba(255,255,255,0.1); }
+  .server-status { display:flex; align-items:center; gap:6px; font-size:0.55rem; letter-spacing:2px; text-transform:uppercase; }
+  .status-dot { width:5px; height:5px; border-radius:50%; flex-shrink:0; }
+  .status-active   .status-dot { background:#b8ff57; }
+  .status-inactive .status-dot { background:#555; }
+  .status-archived .status-dot { background:#ff6b6b; }
+  .status-private  .status-dot { background:#ffce57; }
+  .status-active   { color:#b8ff57; }
+  .status-inactive { color:#555; }
+  .status-archived { color:#ff6b6b; }
+  .status-private  { color:#ffce57; }
+  .server-desc { font-size:0.78rem; line-height:1.75; color:#777; flex:1; }
+  .server-footer { display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:8px; padding-top:12px; border-top:1px solid rgba(255,255,255,0.05); }
+  .server-meta { font-size:0.58rem; letter-spacing:1.5px; text-transform:uppercase; color:#444; display:flex; gap:14px; flex-wrap:wrap; }
+  .server-invite { font-family:'Space Mono',monospace; font-size:0.55rem; letter-spacing:2px; text-transform:uppercase; padding:5px 12px; border:1px solid rgba(184,255,87,0.3); color:#b8ff57; background:transparent; cursor:pointer; text-decoration:none; transition:all 0.15s; }
+  .server-invite:hover { background:rgba(184,255,87,0.08); }
+  .server-filter-bar { display:flex; gap:6px; margin-bottom:24px; flex-wrap:wrap; align-items:center; }
 
   /* CHARACTER GALLERY */
   .chars-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(200px,1fr)); gap:2px; }
@@ -223,6 +257,7 @@
   <div class="nav-tabs">
     <button class="nav-tab active" onclick="showPage('camps',this)">Camps</button>
     <button class="nav-tab" onclick="showPage('characters',this)">Characters</button>
+    <button class="nav-tab" onclick="showPage('servers',this)">Servers</button>
     <button class="nav-tab" onclick="showPage('about',this)">About</button>
   </div>
   <div class="nav-status"><div class="dot"></div><span id="nav-status"></span></div>
@@ -295,6 +330,31 @@
   <div class="section-label"><span>All Characters</span><span id="char-count">—</span></div>
   <div class="chars-grid" id="chars-grid"></div>
   <footer id="footer2"></footer>
+</div></div>
+
+
+<!-- ══ PAGE: SERVERS ══ -->
+<div class="page" id="page-servers"><div class="inner">
+  <div class="hero-tag">Discord Servers</div>
+  <div class="big-title">My Servers<span class="ghost">Discord</span></div>
+  <div class="page-sub" id="servers-sub"></div>
+
+  <div class="server-filter-bar">
+    <span class="tool-label">Filter</span>
+    <button class="tool-btn filter-active" onclick="setServerFilter('all',this)">All</button>
+    <button class="tool-btn" onclick="setServerFilter('camp',this)">Camps</button>
+    <button class="tool-btn" onclick="setServerFilter('community',this)">Community</button>
+    <button class="tool-btn" onclick="setServerFilter('personal',this)">Personal</button>
+    <button class="tool-btn" onclick="setServerFilter('active',this)">Active</button>
+  </div>
+
+  <div class="section-label">
+    <span>All Servers</span>
+    <span id="server-count">—</span>
+  </div>
+
+  <div class="servers-grid" id="servers-grid"></div>
+  <footer id="footer4"></footer>
 </div></div>
 
 
@@ -532,6 +592,49 @@ function closeModal(e) {
 
 document.addEventListener('keydown', e => { if (e.key==='Escape') closeLore(); });
 
+// ── SERVERS ───────────────────────────────────────────────────
+const TYPE_CLASS  = { camp:'badge-camp', community:'badge-community', personal:'badge-personal', collab:'badge-collab', friend:'badge-friend', other:'badge-other' };
+const STATUS_LABEL = { active:'Active', inactive:'Inactive', archived:'Archived', private:'Private' };
+
+function buildServers(filter='all') {
+  const data = SERVERS.filter(s => {
+    if (filter==='all')    return true;
+    if (filter==='active') return s.status==='active';
+    return s.type===filter;
+  });
+  document.getElementById('servers-grid').innerHTML = data.length ? data.map(s => `
+    <div class="server-card">
+      <div class="server-card-top">
+        <div class="server-icon">
+          ${s.icon ? `<img src="${s.icon}" alt="${s.name}" onerror="this.style.display='none'">` : '◻'}
+        </div>
+        <div>
+          <div class="server-name">${s.name}</div>
+          <div class="server-badges">
+            <span class="server-badge ${TYPE_CLASS[s.type]||'badge-other'}">${s.type}</span>
+            <span class="server-status status-${s.status}"><span class="status-dot"></span>${STATUS_LABEL[s.status]||s.status}</span>
+          </div>
+        </div>
+      </div>
+      <div class="server-desc">${s.description}</div>
+      <div class="server-footer">
+        <div class="server-meta">
+          ${s.role    ? `<span>Role: ${s.role}</span>` : ''}
+          ${s.members ? `<span>${s.members} members</span>` : ''}
+        </div>
+        ${s.invite ? `<a class="server-invite" href="${s.invite}" target="_blank">Join →</a>` : ''}
+      </div>
+    </div>`).join('')
+  : `<div style="grid-column:1/-1;text-align:center;padding:48px 0;font-size:0.65rem;letter-spacing:2px;text-transform:uppercase;color:#333">No servers match this filter.</div>`;
+  document.getElementById('server-count').textContent = data.length + ' server' + (data.length!==1?'s':'');
+}
+
+function setServerFilter(filter, btn) {
+  document.querySelectorAll('.tool-btn[onclick^="setServerFilter"]').forEach(b => b.classList.remove('filter-active','active'));
+  btn.classList.add('filter-active');
+  buildServers(filter);
+}
+
 // ── ABOUT ─────────────────────────────────────────────────────
 function buildAbout() {
   const avatar = ME.avatarImg
@@ -606,9 +709,10 @@ function fillMeta() {
   document.getElementById('camps-title').innerHTML  = ME.name + '<span class="ghost">Camps</span>';
   document.getElementById('camps-sub').textContent  = ME.username + ' · all camps · all characters · all placements';
   document.getElementById('chars-sub').textContent  = ME.username + ' · every character across all camps';
+  document.getElementById('servers-sub').textContent = ME.username + ' · all my discord servers';
   document.getElementById('about-title').innerHTML  = ME.name + '<span class="ghost">Profile</span>';
   document.getElementById('about-sub').textContent  = ME.username + ' · object camp competitor';
-  ['footer1','footer2','footer3'].forEach(id => document.getElementById(id).textContent = ME.footerText);
+  ['footer1','footer2','footer3','footer4'].forEach(id => document.getElementById(id).textContent = ME.footerText);
 }
 
 // ── PAGE SWITCHER ─────────────────────────────────────────────
@@ -626,6 +730,7 @@ applyFilter('all');
 updateStats();
 buildHosting();
 buildChars();
+buildServers();
 buildAbout();
 document.getElementById('visible-count').textContent = CAMPS.length + ' camps';
 </script>
