@@ -26,7 +26,7 @@ const SERVERS = [
     role:        "Host",           // your role in the server
     members:     0,               // approximate member count (leave 0 to hide)
     invite:      "https://discord.gg/4R9yGZAKmd",               // discord invite link, e.g. "https://discord.gg/abc123" (leave "" to hide button)
-    icon:        "",               // path to server icon image e.g. "images/servers/bfttd.png" (leave "" for placeholder)
+    icon:        "images/servers/BFTTD.png",               // path to server icon image e.g. "images/servers/bfttd.png" (leave "" for placeholder)
   },
   {
     name:        "🌌 Stary’s Ultimate Challenge 🌌",
