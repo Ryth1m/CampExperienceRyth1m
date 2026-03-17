@@ -14,17 +14,17 @@
 const CHARACTERS = [
   {
     name:  "Stary",
-    img:   "",
-    camps: ["Camp A", "Camp B"],
+    img:   "images/chars/Stary.png",
+    camps: ["COP 1", "COP 2", "COP 3", "COP 4", "COP 5", "COP 7", "COP 8"],
   },
   {
     name:  "Tivo",
-    img:   "",
-    camps: ["Camp C"],
+    img:   "images/chars/Tivo.png",
+    camps: ["CS: R", "EDAC", "cw#p 12", "cw#p 14", "KLO", "BCECFCP"],
   },
   {
     name:  "Paper Stary",
-    img:   "",
+    img:   "images/chars/PaperStary.png",
     camps: ["CW#P 13"],
   },
   // ← copy the block above (from { to },) and paste here to add a new character
