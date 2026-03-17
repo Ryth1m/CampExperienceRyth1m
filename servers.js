@@ -29,8 +29,8 @@ const SERVERS = [
     icon:        "",               // path to server icon image e.g. "images/servers/bfttd.png" (leave "" for placeholder)
   },
   {
-    name:        "SUC",
-    description: "My Show related server that im working on — It needs: Voice actors, Animators, Asset artists, Storyboarders, Actors, Music makers and YOU,the viewersm to vote who goes out!",
+    name:        "🌌 Stary’s Ultimate Challenge 🌌",
+    description: "My Show related server that im working on — It needs: Voice actors, Animators, Asset artists, Storyboarders, Actors, Music makers and YOU,the viewers, to vote who goes out!",
     type:        "other",
     status:      "active",
     role:        "Owner",
