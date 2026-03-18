@@ -23,11 +23,19 @@ const GALLERY = [
   },
   {
     title:  "Tivo Fanart",
-    img:    "",
+    img:    "images/gallery/TivoArtBFTTD1.jpg",
     type:   "fanart",
     char:   "Tivo",
-    artist: "Ryth1m",
-    note:   "",
+    artist: "Crodie",
+    note:   "A Art of Tivo from my object camp 'Battle For The Third Dimension'",
+  },
+  {
+    title:  "Tivo Fanart",
+    img:    "images/gallery/TivoArtBFTTD2.jpg",
+    type:   "fanart",
+    char:   "Tivo",
+    artist: "Wedge",
+    note:   "A Art of Tivo from my object camp 'Battle For The Third Dimension'",
   },
   // ── HOW TO ADD ART ───────────────────────────────────────
   // {
