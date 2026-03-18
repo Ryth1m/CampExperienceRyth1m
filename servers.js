@@ -36,7 +36,7 @@ const SERVERS = [
     role:        "Owner",
     members:     0,
     invite:      "https://discord.gg/5eXUhAateZ",
-    icon:        "",
+    icon:        "images/servers/SUC.png",
   },
   {
     name:        "Coming soon",
