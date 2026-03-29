@@ -46,11 +46,13 @@ const CAMPS = [
   { name: "cw#p 12",         char: "Tivo",         host: "bald guy",        year: "2026", status: "finished",    placement: "2nd"        },
   { name: "cw#p 13",         char: "Paper Stary",  host: "bald guy",        year: "2026", status: "finished",    placement: "14th"       },
   { name: "cw#p 14",         char: "Tivo",         host: "bald guy",        year: "2026", status: "finished",    placement: "7th (DNP)"  },
+  { name: "cw#p 20",         char: "Limbless Tivo",         host: "bald guy",        year: "2026", status: "finished",    placement: "DNP"  },
   { name: "BANNED (forgot)", char: "Tivo",         host: "forgot",          year: "2026", status: "finished",    placement: "banned"     },
   { name: "CS: R",           char: "Tivo",         host: "FridgeTheFridge", year: "2026", status: "ongoing",     placement: "tbd"        },
   { name: "EDAC",            char: "Tivo",         host: "cobalt",          year: "2026", status: "ongoing",     placement: "tbd"        },
   { name: "KLO",             char: "Tivo",         host: "Drill",           year: "2026", status: "didnt start", placement: "tbd"        },
   { name: "BCECFCP",         char: "Tivo",         host: "Shorty",          year: "2026", status: "didnt start", placement: "tbd"        },
+  { name: "TOC",         char: "Tivo",         host: "Redstar Yuri/cobalt",          year: "2026", status: "ongoing", placement: "tbd"        },
   // ← copy any line above and paste here to add a new camp
 ];
 
