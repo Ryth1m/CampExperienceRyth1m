@@ -64,6 +64,7 @@ const CAMPS = [
 // delete everything inside HOSTING = [ ] if you don't host
 
 const HOSTING = [
-  { name: "BFTTD", signups: "closed", contestants: 17, year: "2026" },
+  { name: "BFTTD", signups: "closed", contestants: 13, year: "2026" },
+  { name: "TDBC", signups: "open", contestants: 0, year: "2026" },
   // ← copy any line above and paste here to add a hosted camp
 ];
