@@ -47,7 +47,7 @@ const CAMPS = [
   { name: "cw#p 13",         char: "Paper Stary",  host: "bald guy",        year: "2026", status: "finished",    placement: "14th"       },
   { name: "cw#p 14",         char: "Tivo",         host: "bald guy",        year: "2026", status: "finished",    placement: "7th (DNP)"  },
   { name: "cw#p 20",         char: "Limbless Tivo",         host: "bald guy",        year: "2026", status: "finished",    placement: "DNP"  },
-  { name: "cw#p april fools event",         char: "Paper Stary",         host: "bald guy",        year: "2026", status: "finished",    placement: "DNP"  },
+  { name: "cw#p april fools event",         char: "Paper Stary",         host: "bald guy",        year: "2026", status: "finished",    placement: "3rd"  },
   { name: "BANNED (forgot)", char: "Tivo",         host: "forgot",          year: "2026", status: "finished",    placement: "banned"     },
   { name: "CS: R",           char: "Tivo",         host: "FridgeTheFridge", year: "2026", status: "ongoing",     placement: "tbd"        },
   { name: "EDAC",            char: "Tivo",         host: "cobalt",          year: "2026", status: "ongoing",     placement: "tbd"        },
