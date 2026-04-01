@@ -39,14 +39,14 @@ const SERVERS = [
     icon:        "images/servers/SUC.png",
   },
   {
-    name:        "Coming soon",
-    description: "Coming soon!",
+    name:        "TDBC",
+    description: "My second object camp with a mix of 'Mario party'. Prize: A high quality art of the winner!",
     type:        "camp",
     status:      "Coming soon!",
-    role:        "Coming soon!",
+    role:        "Host",
     members:     0,
-    invite:      "",
-    icon:        "",
+    invite:      "https://discord.gg/ppvCxwMkXG",
+    icon:        "images/servers/Untitled159_20260331133331.png",
   },
   // ── HOW TO ADD A SERVER ──────────────────────────────────
   // Copy from the { below to the matching }, and fill it in!
