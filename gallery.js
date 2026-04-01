@@ -37,6 +37,14 @@ const GALLERY = [
     artist: "Wedge",
     note:   "A Art of Tivo from my object camp 'Battle For The Third Dimension'",
   },
+  {
+    title:  "PaperStary",
+    img:    "images/gallery/PaperStaryArt1.png",
+    type:   "fanart",
+    char:   "Paper Stary",
+    artist: "bald guy",
+    note:   "A Art of Paper Stary from a object camp 'Camp with # People'",
+  },
   // ── HOW TO ADD ART ───────────────────────────────────────
   // {
   //   title:  "Art Title",
