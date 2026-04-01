@@ -80,6 +80,36 @@ const CHARACTERS = [
     facts: [],
   },
 
+    {
+    name:  "Limbless Tivo",
+    img:   "images/chars/Untitled156_20260327103217.png",
+    camps: ["cw#p 20"],
+
+    species:    "Tivos new asset but no limbs",
+    gender:     "",
+    age:        "",
+    appearance: "",
+    personality:"",
+    backstory:  "",
+    abilities:  "",
+    facts: [],
+  },
+
+    {
+    name:  "Guest",
+    img:   "images/chars/guest.png",
+    camps: ["SBC"],
+
+    species:    "Roblox Guest",
+    gender:     "He/Him",
+    age:        "Guest",
+    appearance: "Guest",
+    personality:"Cant speak",
+    backstory:  "Spawned and thats it",
+    abilities:  "Normal roblox avatar",
+    facts: [],
+  },
+
   // ── HOW TO ADD A NEW CHARACTER ───────────────────────────
   // Copy from the { below to the matching }, and fill it in!
   // Delete any fields you don't want to use.
