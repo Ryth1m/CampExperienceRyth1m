@@ -45,6 +45,14 @@ const GALLERY = [
     artist: "bald guy",
     note:   "A Art of Paper Stary from a object camp 'Camp with # People'",
   },
+  {
+    title:  "PaperStary",
+    img:    "images/gallery/paint.png",
+    type:   "myart",
+    char:   "Paper Stary",
+    artist: "Ryth1m",
+    note:   "A Art of Paper Stary's entry from a object camp 'Camp with # People'",
+  },
   // ── HOW TO ADD ART ───────────────────────────────────────
   // {
   //   title:  "Art Title",
