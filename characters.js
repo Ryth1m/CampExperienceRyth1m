@@ -24,7 +24,7 @@ const CHARACTERS = [
   {
     name:  "Stary",
     img:   "images/chars/Stary.png",
-    camps: ["COP 1", "COP 2", "COP 3", "COP 4", "COP 5", "COP 7", "COP 8"],
+    camps: [""],
 
     species:    "Living star",
     gender:     "Genderless (they/them)",
@@ -48,7 +48,7 @@ const CHARACTERS = [
   {
     name:  "Tivo",
     img:   "images/chars/Tivo.png",
-    camps: ["CS: R", "EDAC", "cw#p 12", "cw#p 14", "KLO", "BCECFCP"],
+    camps: [""],
 
     species:    "Hybrid CRT/digital monitor",
     gender:     "he/they",
@@ -68,7 +68,7 @@ const CHARACTERS = [
   {
     name:  "Paper Stary",
     img:   "images/chars/PaperStary.png",
-    camps: ["cw#p 13"],
+    camps: [""],
 
     species:    "Paper star",
     gender:     "",
@@ -83,7 +83,7 @@ const CHARACTERS = [
     {
     name:  "Limbless Tivo",
     img:   "images/chars/Untitled156_20260327103217.png",
-    camps: ["cw#p 20"],
+    camps: [""],
 
     species:    "Tivos new asset but no limbs",
     gender:     "",
@@ -98,7 +98,7 @@ const CHARACTERS = [
     {
     name:  "Guest",
     img:   "images/chars/guest.png",
-    camps: ["SBC"],
+    camps: [""],
 
     species:    "Roblox Guest",
     gender:     "He/Him",
