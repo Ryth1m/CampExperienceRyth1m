@@ -51,10 +51,10 @@ const CAMPS = [
   { name: "BANNED (forgot)", char: "Tivo",         host: "forgot",          year: "2026", status: "finished",    placement: "banned"     },
   { name: "CS: R",           char: "Tivo",         host: "FridgeTheFridge", year: "2026", status: "ongoing",     placement: "tbd"        },
   { name: "EDAC",            char: "Tivo",         host: "cobalt",          year: "2026", status: "ongoing",     placement: "tbd"        },
-  { name: "KLO",             char: "Tivo",         host: "Drill",           year: "2026", status: "didnt start", placement: "tbd"        },
   { name: "BCECFCP",         char: "Tivo",         host: "Shorty",          year: "2026", status: "didnt start", placement: "tbd"        },
   { name: "TOC",         char: "Tivo",         host: "Redstar Yuri/cobalt",          year: "2026", status: "ongoing", placement: "tbd"        }, 
   { name: "SBC",         char: "Guest",         host: "amythya",          year: "2026", status: "ongoing", placement: "tbd"        }, 
+  { name: "TWO 3",         char: "Tivo",         host: "steaalz",          year: "2026", status: "ongoing", placement: "tbd"        }, 
   // ← copy any line above and paste here to add a new camp
 ];
 
